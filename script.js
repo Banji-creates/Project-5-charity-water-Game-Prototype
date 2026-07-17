@@ -12,6 +12,7 @@ const scoreDisplay = document.getElementById("score");
 const timeDisplay = document.getElementById("time");
 const startButton = document.getElementById("start-btn");
 const resetButton = document.getElementById("reset-btn");
+const statusDisplay = document.getElementById("game-status");
 
 startButton.addEventListener("click", startGame);
 resetButton.addEventListener("click", resetGameState);
@@ -25,6 +26,7 @@ function startGame() {
   gameTimer = setInterval(updateTimer, 1000);
   startButton.textContent = "Game Running...";
   startButton.disabled = true;
+  updateStatus("Collect the blue drops and cans while avoiding the red ones!");
 }
 
 function resetGame() {
@@ -33,6 +35,7 @@ function resetGame() {
   scoreDisplay.textContent = score;
   timeDisplay.textContent = remainingTime;
   clearGameObjects();
+  updateStatus("Press start to begin collecting points.");
 }
 
 function clearGameObjects() {
@@ -60,6 +63,9 @@ function endGame() {
   const didWin = score >= winningScore;
   if (didWin) {
     showConfetti();
+    updateStatus(`You win! Final score: ${score}`);
+  } else {
+    updateStatus(`Time's up! Final score: ${score}`);
   }
   showEndMessage(didWin);
 }
@@ -72,6 +78,12 @@ function resetGameState() {
   startButton.textContent = "Start Game";
   startButton.disabled = false;
   resetGame();
+}
+
+function updateStatus(message) {
+  if (statusDisplay) {
+    statusDisplay.textContent = message;
+  }
 }
 
 function showEndMessage(didWin) {
@@ -89,9 +101,9 @@ function showEndMessage(didWin) {
 }
 
 function showConfetti() {
-  const colors = ["#ff3cac", "#ffb347", "#6ee7b7", "#9b5ded", "#f97316"];
+  const colors = ["#ff3cac", "#ffb347", "#6ee7b7", "#9b5ded", "#f97316", "#2e9df7"];
 
-  for (let i = 0; i < 50; i += 1) {
+  for (let i = 0; i < 70; i += 1) {
     const piece = document.createElement("div");
     piece.className = "confetti-piece";
     piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
@@ -99,7 +111,7 @@ function showConfetti() {
     piece.style.width = `${Math.random() * 8 + 6}px`;
     piece.style.height = `${Math.random() * 14 + 6}px`;
     piece.style.opacity = `${Math.random() * 0.6 + 0.4}`;
-    piece.style.animationDuration = `${Math.random() * 1.5 + 1.5}s`;
+    piece.style.animationDuration = `${Math.random() * 1.3 + 1.2}s`;
     piece.style.animationDelay = `${Math.random() * 0.4}s`;
     piece.style.transform = `rotate(${Math.random() * 360}deg)`;
     gameContainer.appendChild(piece);
@@ -141,6 +153,7 @@ function collectDrop(drop, isBad) {
   scoreDisplay.textContent = score;
   flashScore(points);
   showFloatingText(drop, `${points > 0 ? "+" : ""}${points}`);
+  updateStatus(isBad ? "That red drop cost you points. Stay focused!" : "Nice catch! The good drops add points.");
 
   setTimeout(() => {
     if (drop.parentNode) {
@@ -178,6 +191,7 @@ function collectCan(can, isBonus) {
   scoreDisplay.textContent = score;
   flashScore(points);
   showFloatingText(can, `+${points}`);
+  updateStatus(isBonus ? "Bonus can collected! That was a big score boost." : "Great catch! The can adds points.");
 
   setTimeout(() => {
     if (can.parentNode) {
