@@ -10,19 +10,27 @@
     <div class="game-wrapper">
         <h1 class="game-title">Water Drop</h1>
         <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
-        <p class="game-instructions">Click the blue drops and cans to collect points; avoid red drops. Bonus cans give extra points.</p>
+        <p class="game-instructions">Choose a difficulty to change the target score, pace, and challenge level.</p>
         <div class="score-panel">
             <div class="score">Score: <span id="score">0</span></div>
             <div class="timer">Time: <span id="time">30</span>s</div>
+            <label class="difficulty-control" for="difficulty-select">
+                Difficulty
+                <select id="difficulty-select">
+                    <option value="easy">Easy</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </label>
             <button id="start-btn">Start Game</button>
             <button id="reset-btn">Reset</button>
         </div>
         <div id="game-status" class="game-status" aria-live="polite">Press start to begin collecting points.</div>
-        
+
         <div id="game-container">
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
